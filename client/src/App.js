@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import ItemManager from "./contracts/ItemManager.sol";
-import Item from "./contracts/Item.sol";
+import ItemManager from "./contracts/ItemManager.json";
+import Item from "./contracts/Item.json";
 import getWeb3 from "./getWeb3";
 
 import "./App.css";
@@ -29,7 +29,7 @@ class App extends Component {
         Item.networks[networkId] && Item.networks[networkId].address,
       );
 
-      this.setState({ loader: true });
+      this.setState({ loaded: true });
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -52,23 +52,37 @@ class App extends Component {
     this.setState({ storageValue: response });
   };
 
+  handleSubmit = async () => {
+    const { cost, itemName } = this.state;
+    console.log(itemName, cost, this.ItemManager);
+    let result = await this.ItemManager.methods.createItem(itemName, cost).send({ from: this.accounts[0] });
+    console.log(result);
+    alert("Send "+cost+" Wei to ".result.events.SupplyChainStep.returnValues._address);
+  };
+
+  handleInputChange = (event) => {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value
+    });
+  }
+
   render() {
-    if (!this.state.web3) {
+    if (!this.state.loaded) {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
     return (
       <div className="App">
-        <h1>Good to Go!</h1>
-        <p>Your Truffle Box is installed and ready.</p>
-        <h2>Smart Contract Example</h2>
-        <p>
-          If your contracts compiled and migrated successfully, below will show
-          a stored value of 5 (by default).
-        </p>
-        <p>
-          Try changing the value stored on <strong>line 40</strong> of App.js.
-        </p>
-        <div>The stored value is: {this.state.storageValue}</div>
+        <h1>Simply Payment/Supply Chain Example!</h1>
+        <h2>Items</h2>
+
+        <h2>Add Element</h2>
+        Cost: <input type="text" name="cost" value={this.state.value} onChange={this.handleInputChange} />
+        Item Name: <input type="text" name="itemName" value={this.state.itemName} onChange={this.handleInputChange} />
+        <button type="button" onClick={this.handleSubmit}>Create new Item</button>
       </div>
     );
   }

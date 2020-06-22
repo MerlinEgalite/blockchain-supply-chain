@@ -18,7 +18,7 @@ contract ItemManager is Ownable {
 
     event SupplyChainStep(uint _itemIndex, uint _step, address _address);
 
-    function crateItem(string memory _identifier, uint _priceInWei) public onlyOwner {
+    function createItem(string memory _identifier, uint _priceInWei) public onlyOwner {
         Item item = new Item(this, _priceInWei, index);
         items[index]._item = item;
         items[index]._step = SupplyChainSteps.Created;

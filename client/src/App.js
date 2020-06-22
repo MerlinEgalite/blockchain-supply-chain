@@ -28,7 +28,8 @@ class App extends Component {
         Item.abi,
         Item.networks[networkId] && Item.networks[networkId].address,
       );
-
+      
+      this.listenToPaymentEvent();
       this.setState({ loaded: true });
     } catch (error) {
       // Catch any errors for any of the above operations.
@@ -39,25 +40,12 @@ class App extends Component {
     }
   };
 
-  runExample = async () => {
-    const { accounts, contract } = this.state;
-
-    // Stores a given value, 5 by default.
-    await contract.methods.set(5).send({ from: accounts[0] });
-
-    // Get the value from the contract to prove it worked.
-    const response = await contract.methods.get().call();
-
-    // Update state with the result.
-    this.setState({ storageValue: response });
-  };
-
   handleSubmit = async () => {
     const { cost, itemName } = this.state;
     console.log(itemName, cost, this.ItemManager);
     let result = await this.ItemManager.methods.createItem(itemName, cost).send({ from: this.accounts[0] });
     console.log(result);
-    alert("Send "+cost+" Wei to ".result.events.SupplyChainStep.returnValues._address);
+    alert("Send " + cost+" Wei to ".result.events.SupplyChainStep.returnValues._address);
   };
 
   handleInputChange = (event) => {
@@ -67,6 +55,17 @@ class App extends Component {
 
     this.setState({
       [name]: value
+    });
+  }
+
+  listenToPaymentEvent = () => {
+    this.ItemManager.events.SupplyChainStep().on("data", async function(evt) {
+      if (evt.returnValues._setp === 1) {
+        let item = await this.ItemManager.methods.items(evt.returnValues._itemIndx).call();
+        console.log(item);
+        alert("Item " + item._identifier + " was paid ,deliver it now!");
+      };
+      console.log(evt);
     });
   }
 

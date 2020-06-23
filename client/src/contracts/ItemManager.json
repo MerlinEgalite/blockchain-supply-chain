@@ -37,7 +37,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -50,7 +51,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -79,7 +81,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -110,7 +113,8 @@
       "name": "triggerPayment",
       "outputs": [],
       "stateMutability": "payable",
-      "type": "function"
+      "type": "function",
+      "payable": true
     },
     {
       "inputs": [
@@ -5868,11 +5872,12 @@
       },
       "links": {},
       "address": "0x69D6F0ef10342805E77E9B18819ED4948cE8D14d",
-      "transactionHash": "0x8dab0719fdd62e629f6d72248da42e9fa688098b0cfc9453f9394d5f60e4da73"
+      "transactionHash": "0x321f200c7885076c6f2a9ab4e470bbf0432ee13d8560093a533dac03d4fb7bf0"
     }
   },
   "schemaVersion": "3.2.0",
-  "updatedAt": "2020-06-22T19:32:11.205Z",
+  "updatedAt": "2020-06-23T17:49:00.250Z",
+  "networkType": "ethereum",
   "devdoc": {
     "methods": {
       "isOwner()": {

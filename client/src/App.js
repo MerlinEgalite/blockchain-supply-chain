@@ -19,7 +19,7 @@ class App extends Component {
       // Get the contract instance.
       const networkId = await this.web3.eth.net.getId();
 
-      this.ItemManager = new this.web3.eth.Contract(
+      this.itemManager = new this.web3.eth.Contract(
         ItemManager.abi,
         ItemManager.networks[networkId] && ItemManager.networks[networkId].address,
       );
@@ -42,10 +42,10 @@ class App extends Component {
 
   handleSubmit = async () => {
     const { cost, itemName } = this.state;
-    console.log(itemName, cost, this.ItemManager);
-    let result = await this.ItemManager.methods.createItem(itemName, cost).send({ from: this.accounts[0] });
+    console.log(itemName, cost, this.itemManager);
+    let result = await this.itemManager.methods.createItem(itemName, cost).send({ from: this.accounts[0] });
     console.log(result);
-    alert("Send " + cost+" Wei to ".result.events.SupplyChainStep.returnValues._address);
+    alert("Send " + cost + " Wei to " + result.events.SupplyChainStep.returnValues._address);
   };
 
   handleInputChange = (event) => {
@@ -59,9 +59,10 @@ class App extends Component {
   }
 
   listenToPaymentEvent = () => {
-    this.ItemManager.events.SupplyChainStep().on("data", async function(evt) {
+    let self = this;
+    this.itemManager.events.SupplyChainStep().on("data", async function(evt) {
       if (evt.returnValues._setp === 1) {
-        let item = await this.ItemManager.methods.items(evt.returnValues._itemIndx).call();
+        let item = await self.itemManager.methods.items(evt.returnValues._itemIndx).call();
         console.log(item);
         alert("Item " + item._identifier + " was paid ,deliver it now!");
       };
